@@ -9,17 +9,19 @@ public class Board implements Comparable<Board> {
 	private final int[][] tiles;
 	private int hamming, manhattan, distance = Integer.MAX_VALUE;
 	private Board pointer;
+	private int size;
 
 	public Board(int[][] t) {
 		tiles = t;
+		size = 3;
 		computeManhattan();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		Board board = (Board) obj;
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 3; j++)
+		for (int i = 0; i < size; i++)
+			for (int j = 0; j < size; j++)
 				if (this.tiles[i][j] != board.tiles[i][j])
 					return false;
 
@@ -29,9 +31,9 @@ public class Board implements Comparable<Board> {
 	@Override
 	public int hashCode() {
 		int ret = 0;
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 3; j++)
-				ret += Math.pow(tiles[i][j], i * 3 + j);
+		for (int i = 0; i < size; i++)
+			for (int j = 0; j < size; j++)
+				ret += Math.pow(tiles[i][j], i * size + j);
 
 		return ret;
 	}
@@ -62,9 +64,9 @@ public class Board implements Comparable<Board> {
 		// Integer representation of the co-ords of hole
 		int zeroPos = findHole();
 		// Gets x co-ords from zeroPos
-		int zeroPosI = zeroPos / 3;
+		int zeroPosI = zeroPos / size;
 		// Gets y co-ords from zeroPos
-		int zeroPosJ = zeroPos % 3;
+		int zeroPosJ = zeroPos % size;
 
 		// Attempts to swap the hole with all of its adjacent tiles
 		swap(zeroPosI + 1, zeroPosJ, zeroPosI, zeroPosJ, neighbours);
@@ -77,7 +79,7 @@ public class Board implements Comparable<Board> {
 
 	// Verifies whether a holes adjacent is on board and swaps, adding to list
 	private void swap(int i, int j, int o, int p, List<Board> l) {
-		if (i >= 0 && i < 3 && j >= 0 && j < 3) {
+		if (i >= 0 && i < size && j >= 0 && j < size) {
 			int[][] placehold = copy(tiles);
 			int temp = placehold[i][j];
 			placehold[i][j] = placehold[o][p];
@@ -87,16 +89,22 @@ public class Board implements Comparable<Board> {
 	}
 
 	// Returns a deep copy of a 2d array
-	private static int[][] copy(int[][] a) {
-		return java.util.Arrays.stream(a).map(el -> el.clone()).toArray($ -> a.clone());
+	private int[][] copy(int[][] a) {
+		int[][] copy = new int[a.length][a[0].length];
+
+		for (int i = 0; i < size; i++)
+			for (int j = 0; j < size; j++)
+				copy[i][j] = a[i][j];
+
+		return copy;
 	}
 
 	// Iterates through tiles and returns the position of the hole
 	private int findHole() {
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 3; j++)
+		for (int i = 0; i < size; i++)
+			for (int j = 0; j < size; j++)
 				if (tiles[i][j] == 0)
-					return i * 3 + j;
+					return i * size + j;
 
 		throw new AssertionError("Board doesn't seem to have a hole in it");
 	}
@@ -106,9 +114,9 @@ public class Board implements Comparable<Board> {
 	@SuppressWarnings("unused")
 	private void computeHamming() {
 		int h = 0;
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 3; j++)
-				if (tiles[i][j] != i * 3 + j)
+		for (int i = 0; i < size; i++)
+			for (int j = 0; j < size; j++)
+				if (tiles[i][j] != i * size + j)
 					h++;
 
 		hamming = h;
@@ -118,9 +126,9 @@ public class Board implements Comparable<Board> {
 	// distance that each piece put together is out of position
 	private void computeManhattan() {
 		int m = 0;
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 3; j++)
-				m += Math.abs((i - tiles[i][j] / 3) + (j - tiles[i][j] % 3));
+		for (int i = 0; i < size; i++)
+			for (int j = 0; j < size; j++)
+				m += Math.abs((i - tiles[i][j] / size) + (j - tiles[i][j] % size));
 
 		manhattan = m;
 	}
