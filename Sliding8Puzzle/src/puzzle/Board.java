@@ -3,7 +3,6 @@ package puzzle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Board implements Comparable<Board> {
 	private final int[][] tiles;
