@@ -15,7 +15,6 @@ public class Solver {
 		start = s;
 		boards = new PriorityQueue<>(Arrays.asList(start));
 		visited = new HashSet<>(Arrays.asList(start));
-		// Keeps track of boards we have already dealt with
 		start.initDistance();
 	}
 
