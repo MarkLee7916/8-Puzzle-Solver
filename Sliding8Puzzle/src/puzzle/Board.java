@@ -10,10 +10,10 @@ public class Board implements Comparable<Board> {
 	private Board pointer;
 	private int size;
 
-	public Board(int[][] t) {
+	public Board(int[][] t, int s) {
 		tiles = t;
-		size = 3;
-		computeManhattan();
+		size = s;
+		computeHamming();
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class Board implements Comparable<Board> {
 
 	// Returns true is this is a solved board
 	public boolean isGoal() {
-		return manhattan == 0;
+		return hamming == 0;
 	}
 
 	// Returns a list of neighbours of this board
@@ -83,13 +83,13 @@ public class Board implements Comparable<Board> {
 			int temp = placehold[i][j];
 			placehold[i][j] = placehold[o][p];
 			placehold[o][p] = temp;
-			l.add(new Board(placehold));
+			l.add(new Board(placehold, size));
 		}
 	}
 
 	// Returns a deep copy of a 2d array
 	private int[][] copy(int[][] a) {
-		int[][] copy = new int[a.length][a[0].length];
+		int[][] copy = new int[size][size];
 
 		for (int i = 0; i < size; i++)
 			for (int j = 0; j < size; j++)
@@ -110,7 +110,6 @@ public class Board implements Comparable<Board> {
 
 	// Calculates heuristic hamming distance. The hamming distance is the total
 	// number of pieces that are in the wrong position
-	@SuppressWarnings("unused")
 	private void computeHamming() {
 		int h = 0;
 		for (int i = 0; i < size; i++)
@@ -123,6 +122,7 @@ public class Board implements Comparable<Board> {
 
 	// Calculates heuristic manhattan distance. The manhattan distance is the total
 	// distance that each piece put together is out of position
+	@SuppressWarnings("unused")
 	private void computeManhattan() {
 		int m = 0;
 		for (int i = 0; i < size; i++)
@@ -134,7 +134,7 @@ public class Board implements Comparable<Board> {
 
 	@Override
 	public int compareTo(Board b) {
-		return (manhattan + distance) - (b.manhattan + b.distance);
+		return (hamming + distance) - (b.hamming + b.distance);
 	}
 
 	public void incrementDistance() {
