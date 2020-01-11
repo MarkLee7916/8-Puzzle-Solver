@@ -36,7 +36,8 @@ public class Board implements Comparable<Board> {
 		return ret;
 	}
 
-	public void printBoard() {
+	@SuppressWarnings("unused")
+	private void printBoard() {
 		for (int[] a : tiles)
 			System.out.println(Arrays.toString(a));
 	}
