@@ -24,6 +24,9 @@ public class Main {
 
 	// Takes a solved board and use a rng to shuffle it, generating a new one
 	private static Board generateBoard(int size) {
+		if (size <= 1)
+			throw new IllegalArgumentException("Board is of an invalid size");		
+		
 		int[][] puzzle = new int[size][size];
 
 		for (int i = 0; i < size; i++)
@@ -43,8 +46,14 @@ public class Main {
 	// Alternative method of generating the puzzle. Tends to generate harder boards to solve
 	@SuppressWarnings("unused")
 	private static Board generatePuzzle(int size) {
+		if (size <= 1)
+			throw new IllegalArgumentException("Board is of an invalid size");		
+		
 		int[][] puzzle = new int[size][size];
 		List<Integer> l = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 0));
+		
+		if (size <= 1)
+			throw new IllegalArgumentException("Board is of an invalid size");
 
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
