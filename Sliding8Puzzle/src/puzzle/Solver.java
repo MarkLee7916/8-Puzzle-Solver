@@ -7,7 +7,8 @@ import java.util.Queue;
 import java.util.Set;
 
 public class Solver {
-	private Board start, currentBoard;
+	private final Board start;
+	private Board currentBoard;
 	private final Queue<Board> boards;
 	private final Set<Board> visited;
 
@@ -15,7 +16,6 @@ public class Solver {
 		start = s;
 		boards = new PriorityQueue<>(Arrays.asList(start));
 		visited = new HashSet<>(Arrays.asList(start));
-		start.initDistance();
 	}
 
 	// Uses A* pathfinding to solve puzzle, where a node is represented by a board
@@ -31,7 +31,6 @@ public class Solver {
 				// Since each edge is equal to one we never have to visit the same board twice
 				if (!visited.contains(b)) {
 					boards.add(b);
-					b.incrementDistance();
 					b.setPointer(currentBoard);
 					visited.add(b);
 				}
