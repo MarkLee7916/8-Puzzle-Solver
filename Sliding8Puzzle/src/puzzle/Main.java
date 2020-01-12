@@ -11,6 +11,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
+		// The argument to generateBoard() decides the size of the puzzle
 		Board start = generateBoard(3);
 
 		System.out.println("Puzzle to solve is " + start);
