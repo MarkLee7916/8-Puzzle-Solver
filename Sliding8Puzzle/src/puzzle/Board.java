@@ -6,9 +6,9 @@ import java.util.List;
 
 public class Board implements Comparable<Board> {
 	private final int[][] tiles;
-	private int hamming, manhattan, distance = Integer.MAX_VALUE;
+	private int hamming, manhattan;
 	private Board pointer;
-	private int size;
+	private final int size;
 
 	public Board(int[][] t, int s) {
 		tiles = t;
@@ -79,7 +79,7 @@ public class Board implements Comparable<Board> {
 	// Verifies whether a holes adjacent is on board and swaps, adding to list
 	private void swap(int i, int j, int o, int p, List<Board> l) {
 		if (i >= 0 && i < size && j >= 0 && j < size) {
-			int[][] placehold = copy(tiles);
+			int[][] placehold = deepCopy(tiles);
 			int temp = placehold[i][j];
 			placehold[i][j] = placehold[o][p];
 			placehold[o][p] = temp;
@@ -88,7 +88,7 @@ public class Board implements Comparable<Board> {
 	}
 
 	// Returns a deep copy of a 2d array
-	private int[][] copy(int[][] a) {
+	private int[][] deepCopy(int[][] a) {
 		int[][] copy = new int[size][size];
 
 		for (int i = 0; i < size; i++)
@@ -134,24 +134,11 @@ public class Board implements Comparable<Board> {
 
 	@Override
 	public int compareTo(Board b) {
-		return (hamming + distance) - (b.hamming + b.distance);
-	}
-
-	public void incrementDistance() {
-		distance++;
-	}
-
-	public int getDistance() {
-		return distance;
+		return hamming - b.hamming;
 	}
 
 	public void setPointer(Board p) {
 		pointer = p;
-	}
-
-	// Used for the starting board to initialise distance to 0
-	public void initDistance() {
-		distance = 0;
 	}
 
 	public Board getPointer() {
