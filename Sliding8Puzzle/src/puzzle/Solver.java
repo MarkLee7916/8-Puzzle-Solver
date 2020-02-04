@@ -19,16 +19,15 @@ public class Solver {
 	}
 
 	// Uses A* pathfinding to solve puzzle, where a node is represented by a board
-	// and each edge is equal to one. A board is adjacent to another if it can be
-	// moved to that position in one turn. This is called a 'neighbour'
+	// and each edge is a movement between boards
 	public void run() {
 		while (!boards.isEmpty()) {
-			// Returns the smallest board in the queue i.e the one with the lowest g value
+			// Returns the smallest board in the queue i.e the one with the lowest heuristic value
 			currentBoard = boards.poll();
 
 			// Iterates through the boards adjacents
 			for (Board b : currentBoard.neighbours()) {
-				// Since each edge is equal to one we never have to visit the same board twice
+				// We check if a board is in the visited Set to avoid cycles
 				if (!visited.contains(b)) {
 					boards.add(b);
 					b.setPointer(currentBoard);
