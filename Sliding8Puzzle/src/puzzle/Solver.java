@@ -18,16 +18,15 @@ public class Solver {
 		visited = new HashSet<>(Arrays.asList(start));
 	}
 
-	// Uses A* pathfinding to solve puzzle, where a node is represented by a board
-	// and each edge is a movement between boards
+	// Uses A* pathfinding to solve puzzle
 	public void run() {
 		while (!boards.isEmpty()) {
-			// Returns the smallest board in the queue i.e the one with the lowest heuristic value
+			// Returns the smallest board in the queue i.e the one with the lowest g value
 			currentBoard = boards.poll();
 
 			// Iterates through the boards adjacents
 			for (Board b : currentBoard.neighbours()) {
-				// We check if a board is in the visited Set to avoid cycles
+				// Since each edge is equal to one we never have to visit the same board twice
 				if (!visited.contains(b)) {
 					boards.add(b);
 					b.setPointer(currentBoard);
@@ -44,8 +43,7 @@ public class Solver {
 		throw new AssertionError("Puzzle hasn't been solved");
 	}
 
-	// Follows the chain of pointers to get the steps that were taken to solve the
-	// puzzle
+	// Follows the chain of pointers to get the steps that were taken to solve the puzzle
 	private String stringPath() {
 		Board b = currentBoard;
 		StringBuilder build = new StringBuilder("");

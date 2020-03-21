@@ -6,14 +6,14 @@ import java.util.List;
 
 public class Board implements Comparable<Board> {
 	private final int[][] tiles;
-	private int hamming, manhattan;
+	private int manhattan;
 	private Board pointer;
 	private final int size;
 
-	public Board(int[][] t, int s) {
+	public Board(int[][] t) {
 		tiles = t;
-		size = s;
-		computeHamming();
+		size = t.length;
+		computeManhattan();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class Board implements Comparable<Board> {
 		int ret = 0;
 		for (int i = 0; i < size; i++)
 			for (int j = 0; j < size; j++)
-				ret += Math.pow(tiles[i][j], i * size + j);
+				ret += Math.pow(tiles[i][j], getPositionFromCoords(i, j));
 
 		return ret;
 	}
@@ -54,7 +54,7 @@ public class Board implements Comparable<Board> {
 
 	// Returns true is this is a solved board
 	public boolean isGoal() {
-		return hamming == 0;
+		return manhattan == 0;
 	}
 
 	// Returns a list of neighbours of this board
@@ -83,7 +83,7 @@ public class Board implements Comparable<Board> {
 			int temp = placehold[i][j];
 			placehold[i][j] = placehold[o][p];
 			placehold[o][p] = temp;
-			l.add(new Board(placehold, size));
+			l.add(new Board(placehold));
 		}
 	}
 
@@ -103,38 +103,29 @@ public class Board implements Comparable<Board> {
 		for (int i = 0; i < size; i++)
 			for (int j = 0; j < size; j++)
 				if (tiles[i][j] == 0)
-					return i * size + j;
+					return getPositionFromCoords(i, j);
 
 		throw new AssertionError("Board doesn't seem to have a hole in it");
 	}
 
-	// Calculates heuristic hamming distance. The hamming distance is the total
-	// number of pieces that are in the wrong position
-	private void computeHamming() {
-		int h = 0;
-		for (int i = 0; i < size; i++)
-			for (int j = 0; j < size; j++)
-				if (tiles[i][j] != i * size + j)
-					h++;
-
-		hamming = h;
+	private int getPositionFromCoords(int i, int j) {
+		return i * size + j;
 	}
 
 	// Calculates heuristic manhattan distance. The manhattan distance is the total
-	// distance that each piece put together is out of position
-	@SuppressWarnings("unused")
+	// distance that each piece put together is out of position.
 	private void computeManhattan() {
-		int m = 0;
+		int value = 0;
 		for (int i = 0; i < size; i++)
 			for (int j = 0; j < size; j++)
-				m += Math.abs((i - tiles[i][j] / size) + (j - tiles[i][j] % size));
+				value += Math.abs((i - tiles[i][j] / size) + Math.abs((j - tiles[i][j] % size)));
 
-		manhattan = m;
+		manhattan = value;
 	}
 
 	@Override
 	public int compareTo(Board b) {
-		return hamming - b.hamming;
+		return manhattan - b.manhattan;
 	}
 
 	public void setPointer(Board p) {
